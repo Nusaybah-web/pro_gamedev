@@ -16,7 +16,7 @@ class ball:
 
     def move(self):
         self.x+=self.xspeed
-        self.y=self.yspeed
+        self.y+=self.yspeed
         if self.x>=1000 or self.x<=0:
             self.xspeed=-self.xspeed
 
@@ -45,4 +45,4 @@ while True:
         i.move()
 
 
-        pygame.display.update()
+    pygame.display.update()
