@@ -13,7 +13,7 @@ font=pygame.font.SysFont("arial",40)
 
 clock=pygame.time.Clock()
 
-flying=True
+flying=False
 
 class bird(pygame.sprite.Sprite):
     def __init__(self,x,y):
@@ -27,8 +27,19 @@ class bird(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.center=[x,y]
         self.counter=0
+        self.velocity=0
+        self.click=False
     def update(self):
+        if flying==True:
+            self.velocity+=1
+            if self.rect.y<500:
+                self.rect.y+=self.velocity
         if gameover==False:
+            if pygame.mouse.get_pressed()[0]==1 and self.click==False:
+                self.velocity=-15
+                self.click=True
+            else:
+                self.click=False
             self.counter+=1
             if self.counter>5:
                 self.conter=0
@@ -36,26 +47,33 @@ class bird(pygame.sprite.Sprite):
                 if self.index>=3:
                     self.index=0
                 self.image=self.birds[self.index]
-        if flying==True:
-            self.rect.y+=10
-            if self.rect.y>532:
-                self.rect.y=532
+        
+        
+        
+            
 
 flappybirds=pygame.sprite.Group()
 
-flappies=bird(40,400)
+flappies=bird(40,300)
 flappybirds.add(flappies)
 
+x=0
+
 while True:
-    clock.tick(10)
+    clock.tick(15)
 
     screen.blit(bg2,(0,0))
-    screen.blit(bg1,(0,532))
+    screen.blit(bg1,(x,532))
+
+    if flying==True and gameover==False:
+        x-=5
+        if x==-35:
+            x=0
 
     flappybirds.draw(screen)
     flappybirds.update()
 
-    if flappies.rect.y==532:
+    if flappies.rect.y>=500:
         gameover=True
         flying=False
 
@@ -65,5 +83,6 @@ while True:
         
         if event.type==pygame.MOUSEBUTTONDOWN and flying==False and gameover==False:
             flying=True
+    
 
     pygame.display.update()
